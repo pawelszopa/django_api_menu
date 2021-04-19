@@ -7,7 +7,7 @@ from django.db import models
 # Create your models here.
 class Menu(models.Model):
     name = models.CharField(max_length=255, unique=True, null=False, blank=False, validators=[MinLengthValidator(1)])
-    dish = models.ManyToManyField('Dish', related_name='menu', null=False, blank=False, validators=[MinLengthValidator(1)])
+    dish = models.ManyToManyField('Dish', related_name='menu', blank=True)
     description = models.TextField(max_length=1500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
