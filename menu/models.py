@@ -24,6 +24,7 @@ class Dish(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_vegetarian = models.BooleanField()
+    image = models.ImageField(upload_to='photos/', blank=True)
 
     def __str__(self):
         return self.name

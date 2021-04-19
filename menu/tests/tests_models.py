@@ -95,7 +95,8 @@ class DishTests(TestCase):
     def test_dish_fields(self):
         self.assertEqual(
             [*self.dish_vege.__dict__],
-            ['_state', 'id', 'name', 'description', 'price', 'prep_time', 'created_at', 'updated_at', 'is_vegetarian']
+            ['_state', 'id', 'name', 'description', 'price', 'prep_time', 'created_at', 'updated_at', 'is_vegetarian',
+             'image']
         )
 
     def test_relationship(self):
@@ -104,7 +105,7 @@ class DishTests(TestCase):
     def test_create_dish_with_to_long_name(self):
         with self.assertRaises(DataError):
             dish_meat = Dish.objects.create(
-                name='x'*256,
+                name='x' * 256,
                 description='Test meat description 1',
                 price='10.50',
                 prep_time=60,
@@ -130,5 +131,3 @@ class DishTests(TestCase):
                 prep_time=-60,
                 is_vegetarian=False,
             )
-
-
