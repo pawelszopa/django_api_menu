@@ -88,3 +88,47 @@ class DishTests(TestCase):
     def test_dish_creation(self):
         self.assertTrue(isinstance(self.dish_vege, Dish))
         self.assertTrue(isinstance(self.dish_vege, Dish))
+
+    def test_dish_str(self):
+        self.assertEqual(str(self.dish_vege), 'Test vegetarian Dish 1')
+
+    def test_dish_fields(self):
+        self.assertEqual(
+            [*self.dish_vege.__dict__],
+            ['_state', 'id', 'name', 'description', 'price', 'prep_time', 'created_at', 'updated_at', 'is_vegetarian']
+        )
+
+    def test_relationship(self):
+        self.assertEqual(self.dish_vege.menu.first().id, self.menu.id)
+
+    def test_create_dish_with_to_long_name(self):
+        with self.assertRaises(DataError):
+            dish_meat = Dish.objects.create(
+                name='x'*256,
+                description='Test meat description 1',
+                price='10.50',
+                prep_time=60,
+                is_vegetarian=False,
+            )
+
+    def test_create_dish_with_to_big_price(self):
+        with self.assertRaises(DataError):
+            dish_meat = Dish.objects.create(
+                name='Test name',
+                description='Test meat description 1',
+                price='11110.50',
+                prep_time=60,
+                is_vegetarian=False,
+            )
+
+    def test_create_dish_with_negative_prep_time(self):
+        with self.assertRaises(IntegrityError):
+            dish_meat = Dish.objects.create(
+                name='Test name',
+                description='Test meat description 1',
+                price='10.50',
+                prep_time=-60,
+                is_vegetarian=False,
+            )
+
+
