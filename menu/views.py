@@ -55,36 +55,43 @@ class PublicMenuListView(ListAPIView):
     model = Menu
 
     def get_queryset(self):
-        sort_name = self.request.GET.get('sn')
-        sort_dish_gte = self.request.GET.get('gte') if self.request.GET.get('gte') else 0
-        sort_dish_lte = self.request.GET.get('lte') if self.request.GET.get('lte') else 99999
-
         filter_name = self.request.GET.get('fn')
-        filter_created = self.request.GET.get('fcr')
-        filter_update = self.request.GET.get('upd')
+        filter_menu_creation_gte = self.request.GET.get('cgte')
+        filter_menu_creation_lte = self.request.GET.get('clte')
+        filter_menu_updated_gte = self.request.GET.get('ugte')
+        filter_menu_updated_lte = self.request.GET.get('ulte')
 
-        if sort_name:
-            queryset = self.model.objects.filter(name__icontains=sort_name)
+        sort_name = self.request.GET.get('sn')
+        sort_dish = self.request.GET.get('sd')
 
-        else:
-            queryset = Menu.objects.filter(dish__isnull=False)
+        queryset = self.model.objects.all()
 
-        queryset = queryset.annotate(dish_number=Count('dish')).filter(dish_number__gte=sort_dish_gte,
-                                                                       dish_number__lte=sort_dish_lte)
-        if filter_name == 'DESC':
+        if filter_name:
+            queryset = queryset.filter(name__icontains=filter_name)
+
+        if filter_menu_creation_gte:
+            queryset = queryset.filter(created_at__gte=filter_menu_creation_gte)
+
+        if filter_menu_creation_lte:
+            queryset = queryset.filter(created_at__lte=filter_menu_creation_lte)
+
+        if filter_menu_updated_gte:
+            queryset = queryset.filter(updated_at__gte=filter_menu_updated_gte)
+
+        if filter_menu_updated_lte:
+            queryset = queryset.filter(updated_at__lte=filter_menu_updated_lte)
+
+        if sort_name == 'DESC':
             queryset = queryset.order_by('-name')
-        if filter_name == "ASC":
+
+        if sort_name == "ASC":
             queryset = queryset.order_by('name')
 
-        if filter_created == 'DESC':
-            queryset = queryset.order_by('-created_at')
-        if filter_created == "ASC":
-            queryset = queryset.order_by('created_at')
+        if sort_dish == 'DESC':
+            queryset = queryset.annotate(dish_number=Count('dish')).order_by('-dish_number')
 
-        if filter_update == 'DESC':
-            queryset = queryset.order_by('-updated_at')
-        if filter_update == "ASC":
-            queryset = queryset.order_by('updated_at')
+        if sort_dish == 'ASC':
+            queryset = queryset.annotate(dish_number=Count('dish')).order_by('dish_number')
 
         return queryset
 
