@@ -64,7 +64,7 @@ class PublicMenuListView(ListAPIView):
         sort_name = self.request.GET.get('sn')
         sort_dish = self.request.GET.get('sd')
 
-        queryset = self.model.objects.all()
+        queryset = self.model.objects.annotate(dish_number=Count('dish')).filter(dish_number__gt=0)
 
         if filter_name:
             queryset = queryset.filter(name__icontains=filter_name)
@@ -88,10 +88,10 @@ class PublicMenuListView(ListAPIView):
             queryset = queryset.order_by('name')
 
         if sort_dish == 'DESC':
-            queryset = queryset.annotate(dish_number=Count('dish')).order_by('-dish_number')
+            queryset = queryset.order_by('-dish_number')
 
         if sort_dish == 'ASC':
-            queryset = queryset.annotate(dish_number=Count('dish')).order_by('dish_number')
+            queryset = queryset.order_by('dish_number')
 
         return queryset
 
