@@ -2,6 +2,7 @@ from django.urls import path
 
 from menu import views
 
+
 urlpatterns = [
     path('private/menu/', views.MenuListView.as_view(), name='private_menu'),
     path('private/menu/<int:pk>', views.MenuDetailedView.as_view(), name='private_menu_detail'),

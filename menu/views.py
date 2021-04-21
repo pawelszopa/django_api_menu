@@ -2,17 +2,15 @@ from django.db.models import Count
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticated
 
 from menu.models import Menu, Dish
 from menu.serializers import MenuSerializer, DishSerializer
 
 
 class MenuListView(ListCreateAPIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, SessionAuthentication, BasicAuthentication]
 
     serializer_class = MenuSerializer
     model = Menu
@@ -20,8 +18,8 @@ class MenuListView(ListCreateAPIView):
 
 
 class MenuDetailedView(RetrieveUpdateDestroyAPIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, SessionAuthentication, BasicAuthentication]
+
     serializer_class = MenuSerializer
     model = Menu
 
@@ -31,8 +29,7 @@ class MenuDetailedView(RetrieveUpdateDestroyAPIView):
 
 
 class DishListView(ListCreateAPIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, SessionAuthentication, BasicAuthentication]
 
     serializer_class = DishSerializer
     model = Dish
@@ -40,8 +37,8 @@ class DishListView(ListCreateAPIView):
 
 
 class DishDetailedView(RetrieveUpdateDestroyAPIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, SessionAuthentication, BasicAuthentication]
+
     serializer_class = DishSerializer
     model = Dish
 
@@ -51,6 +48,7 @@ class DishDetailedView(RetrieveUpdateDestroyAPIView):
 
 
 class PublicMenuListView(ListAPIView):
+    permission_classes = []
     serializer_class = MenuSerializer
     model = Menu
 
@@ -97,6 +95,7 @@ class PublicMenuListView(ListAPIView):
 
 
 class PublicMenuView(RetrieveAPIView):
+    permission_classes = []
     serializer_class = MenuSerializer
     model = Menu
 
