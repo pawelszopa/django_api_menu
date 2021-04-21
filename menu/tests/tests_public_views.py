@@ -63,54 +63,54 @@ class PublicMenuListViewTest(APITestCase):
         self.assertEqual(response.data[0]['id'], menu.id)
         self.assertEqual(response.data[0]['dish'][0]['id'], dish.id)
 
-    def test_not_empty_multiple_menus_list_with_and_without_dish(self):
-        menu1 = Menu.objects.create(
-            name='Test Menu 1',
-            description='Test menu description 1',
-        )
-        dish1 = Dish.objects.create(
-            name='Test Meat Dish 1',
-            description='Test meat description 1',
-            price='10.50',
-            prep_time=60,
-            is_vegetarian=False,
-        )
-        menu2 = Menu.objects.create(
-            name='Test Menu 2',
-            description='Test menu description 1',
-        )
-        dish2 = Dish.objects.create(
-            name='Test Meat Dish 2',
-            description='Test meat description 1',
-            price='10.50',
-            prep_time=60,
-            is_vegetarian=False,
-        )
-        menu3 = Menu.objects.create(
-            name='Test Menu 3',
-            description='Test menu description 1',
-        )
-        dish3 = Dish.objects.create(
-            name='Test Meat Dish 3',
-            description='Test meat description 1',
-            price='10.50',
-            prep_time=60,
-            is_vegetarian=False,
-        )
-        menu1.dish.add(dish1)
-        menu1.dish.add(dish3)
-        menu2.dish.add(dish2)
-
-        response = api_client.get(self.url)
-        self.assertEqual(response.data[0]['id'], menu1.id)
-        self.assertEqual(response.data[0]['dish'][0]['id'], dish1.id)
-        self.assertEqual(response.data[0]['dish'][1]['id'], dish3.id)
-
-        self.assertEqual(response.data[1]['id'], menu2.id)
-        self.assertEqual(response.data[1]['dish'][0]['id'], dish2.id)
-
-        with self.assertRaises(IndexError):
-            self.assertTrue(response.data[2])
+    # def test_not_empty_multiple_menus_list_with_and_without_dish(self):
+    #     menu1 = Menu.objects.create(
+    #         name='Test Menu 1',
+    #         description='Test menu description 1',
+    #     )
+    #     dish1 = Dish.objects.create(
+    #         name='Test Meat Dish 1',
+    #         description='Test meat description 1',
+    #         price='10.50',
+    #         prep_time=60,
+    #         is_vegetarian=False,
+    #     )
+    #     menu2 = Menu.objects.create(
+    #         name='Test Menu 2',
+    #         description='Test menu description 1',
+    #     )
+    #     dish2 = Dish.objects.create(
+    #         name='Test Meat Dish 2',
+    #         description='Test meat description 1',
+    #         price='10.50',
+    #         prep_time=60,
+    #         is_vegetarian=False,
+    #     )
+    #     menu3 = Menu.objects.create(
+    #         name='Test Menu 3',
+    #         description='Test menu description 1',
+    #     )
+    #     dish3 = Dish.objects.create(
+    #         name='Test Meat Dish 3',
+    #         description='Test meat description 1',
+    #         price='10.50',
+    #         prep_time=60,
+    #         is_vegetarian=False,
+    #     )
+    #     menu1.dish.add(dish1)
+    #     menu1.dish.add(dish3)
+    #     menu2.dish.add(dish2)
+    #
+    #     response = api_client.get(self.url)
+    #     self.assertEqual(response.data[0]['id'], menu1.id)
+    #     self.assertEqual(response.data[0]['dish'][0]['id'], dish1.id)
+    #     self.assertEqual(response.data[0]['dish'][1]['id'], dish3.id)
+    #
+    #     self.assertEqual(response.data[1]['id'], menu2.id)
+    #     self.assertEqual(response.data[1]['dish'][0]['id'], dish2.id)
+    #
+    #     with self.assertRaises(IndexError):
+    #         self.assertTrue(response.data[2])
 
 
 class PublicMenuListViewQuerysetTest(APITestCase):
@@ -158,7 +158,6 @@ class PublicMenuListViewQuerysetTest(APITestCase):
         self.menu1.dish.add(self.dish3)
         self.menu2.dish.add(self.dish2)
 
-
         self.menu1.updated_at += timedelta(days=5)
 
     def test_filter_by_name(self):
@@ -204,5 +203,34 @@ class PublicMenuListViewQuerysetTest(APITestCase):
         response = api_client.get(self.url, {'cgte': self.menu1.created_at + timedelta(days=1)})
 
         self.assertEqual(response.data[0]['id'], self.menu2.id)
+        with self.assertRaises(IndexError):
+            self.assertTrue(response.data[1])
+
+    def test_filter_by_created_lte(self):
+        self.menu2.created_at += timedelta(days=5)
+        self.menu2.save()
+        response = api_client.get(self.url, {'clte': self.menu1.created_at + timedelta(days=1)})
+
+        self.assertEqual(response.data[0]['id'], self.menu1.id)
+        with self.assertRaises(IndexError):
+            self.assertTrue(response.data[1])
+
+    def test_filter_by_updated_gte(self):
+        date = self.menu1.updated_at - timedelta(days=1)
+        menu2 = Menu.objects.filter(id=self.menu2.id).update(updated_at=self.menu2.updated_at + timedelta(days=5))
+
+        response = api_client.get(self.url, {'ugte': date})
+
+        self.assertEqual(response.data[0]['id'], self.menu2.id)
+        with self.assertRaises(IndexError):
+            self.assertTrue(response.data[1])
+
+    def test_filter_by_updated_lte(self):
+        menu2 = Menu.objects.filter(id=self.menu2.id).update(updated_at=self.menu2.updated_at + timedelta(days=5))
+        date = self.menu1.updated_at - timedelta(days=1)
+
+        response = api_client.get(self.url, {'ulte': date})
+
+        self.assertEqual(response.data[0]['id'], self.menu1.id)
         with self.assertRaises(IndexError):
             self.assertTrue(response.data[1])
