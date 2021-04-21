@@ -25,9 +25,3 @@ urlpatterns = [
     path('v1/', include('menu.urls'), name='menu')
 ]
 
-if settings.DEBUG:
-    urlpatterns += [
-        url(r'^media/(?P<path>.*)&', serve, {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-    ]
