@@ -12,7 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+
 
     # local
     'menu.apps.MenuConfig',
@@ -115,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ.get("UTC_ZONE", "UTC")
 
 USE_I18N = True
 
@@ -145,7 +150,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ],
-    'DATETIME_FORMAT': "%Y-%m-%d - %H:%M:%S",
+    'DATETIME_FORMAT': "%Y-%m-%d",
 }
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -153,15 +158,9 @@ REST_FRAMEWORK = {
 
 SITE_ID = 1
 EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
-SENDGRID_API_KEY = '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'
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 
-# SENDGRID_API_KEY = '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'
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'menuemailsender@abc.com'
-# EMAIL_HOST_PASSWORD = 'testpass12345678'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-# DEFAULT_FROM_EMAIL = 'menuemailsender@abc.com'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SCHEDULER_HOUR = int(os.environ.get("SCHEDULER_HOUR", 22))
+SCHEDULER_MINUTE = int(os.environ.get("SCHEDULER_MINUTE", 45))

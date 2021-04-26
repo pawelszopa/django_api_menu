@@ -5,20 +5,29 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sent!</title>
+    <title>Dishes update from {{ date_to_search }}</title>
 </head>
 <body>
-<h3>Hello There!</h3>
-<p>I'm glad to show you new menus created yesterday!</p>
-<ul>
-{% for menu in queryset %}
-<li>name: {{ menu.name }},
-    description: {{ menu.description }}
-    dishes: {{ menu.dish }}
-</li>
+<h1>Dishes update from {{ date_to_search }} </h1>
+{% if created_dishes or updated_dishes %}
+    {% if created_dishes %}
+        <h2>New dishes</h2>
+        {% for dish in created_dishes %}
+            <div>{{ dish.name }}  {{ dish.price }}</div>
+        {% endfor %}
+    {% else %}
+        <h2>No new dishes</h2>
+    {% endif %}
+    {% if updated_dishes %}
+        <h2>Updated dishes</h2>
+        {% for dish in updated_dishes %}
+            <div>{{ dish.name }}  {{ dish.price }}</div>
+        {% endfor %}
 
-{% endfor %}
-  Enjoy!
-</ul>
+    {% else %}
+        <h2>No updated dishes</h2>
+    {% endif %}
+{% endif %}
+
 </body>
 </html>
