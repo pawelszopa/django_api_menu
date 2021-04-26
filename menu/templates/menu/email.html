@@ -13,7 +13,7 @@
     {% if created_dishes %}
         <h2>New dishes</h2>
         {% for dish in created_dishes %}
-            <div>{{ dish.name }}  {{ dish.price }}</div>
+            <div>{{ dish.name }} {{ dish.price }}</div>
         {% endfor %}
     {% else %}
         <h2>No new dishes</h2>
@@ -21,12 +21,14 @@
     {% if updated_dishes %}
         <h2>Updated dishes</h2>
         {% for dish in updated_dishes %}
-            <div>{{ dish.name }}  {{ dish.price }}</div>
+            <div>{{ dish.name }} {{ dish.price }}</div>
         {% endfor %}
 
     {% else %}
         <h2>No updated dishes</h2>
     {% endif %}
+{% else %}
+    <h2> No new or updated dishes </h2>
 {% endif %}
 
 </body>
