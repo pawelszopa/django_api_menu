@@ -30,10 +30,17 @@ Views are permission dependant overview below (for more API urls check `swagger`
 `api/v1/dishes/{id}` allows to get information about a dish by id
 
 ### To use predefined data:
-`docker-compose exec web python manage.py loaddata menu`
+`docker-compose exec web python manage.py loaddata menu/fixtures/customuser.json`
+`docker-compose exec web python manage.py loaddata menu/fixtures/dish.json`
+`docker-compose exec web python manage.py loaddata menu/fixtures/menu.json`
+
+admin username: `pawel`
+admin password: `pawel`
 
 ### Tests
-1.API tests - type command `docker-compose exec web python manage.py test menu/tests` in terminal in project root directory.
+in terminal in project root directory.
+1.API tests - type command `docker-compose exec web python manage.py test menu/tests` 
+1.Custom User tests - type command `docker-compose exec web python manage.py test users` 
 
 ### Coverage
 Check coverage:
