@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
 
     # local
+    'users.apps.UsersConfig',
     'menu.apps.MenuConfig',
 ]
 
@@ -168,6 +169,9 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 SCHEDULER_HOUR = int(os.environ.get("SCHEDULER_HOUR", 22))
 SCHEDULER_MINUTE = int(os.environ.get("SCHEDULER_MINUTE", 45))
 
+IMAGE_TYPES = ['image/jpeg', 'image/png']
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG
