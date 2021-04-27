@@ -75,5 +75,3 @@ class DishSerializerTests(TestCase):
         self.assertEqual(data['is_vegetarian'], self.dish_meat.is_vegetarian)
         self.assertEqual(bool(data['image']), bool(self.dish_meat.image))
         self.assertEqual(data['menu'][0], self.dish_meat.menu.first().id)
-
-

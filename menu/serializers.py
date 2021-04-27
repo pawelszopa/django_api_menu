@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from menu.models import Menu, Dish
 
-
 class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu

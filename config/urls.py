@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
@@ -37,6 +38,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(pattern_name="menu:public_menu")),
     path('v1/', include('menu.urls'), name='menu'),
     path('v1/dj-rest-auth/', include('dj_rest_auth.urls')),
     path('v1/dj-rest-auth/registration', include('dj_rest_auth.registration.urls')),
