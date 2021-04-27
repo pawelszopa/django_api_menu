@@ -14,7 +14,11 @@ You have to have installed docker and docker-compose on your computer.
 `http://localhost:8000/swagger/`
 
 ### Endpoints:
-Views depending on permissions
+
+Public API - prevent from seeing empty menus (cards). Empty menu is menu without any dish
+
+Views are permission dependant overview below (for more API urls check `swagger`)
+
 `/admin` - CMS admin
 `/accounts/login/` - DRF rest Login
 `/accounts/registration/` -  DRF  registration
@@ -25,7 +29,7 @@ Views depending on permissions
 `api/v1/cards/{id}` allows to get information about a menu by id
 `api/v1/dishes/{id}` allows to get information about a dish by id
 
-### To use  predefined data:
+### To use predefined data:
 `docker-compose exec web python manage.py loaddata menu`
 
 ### Tests
@@ -50,15 +54,15 @@ menu/migrations/0001_initial.py        9      0   100%
 menu/migrations/__init__.py            0      0   100%
 menu/models.py                        25      0   100%
 menu/permissions.py                    9      0   100%
-menu/serializers.py                   23      3    87%
+menu/serializers.py                   23      0   100%
 menu/tests/tests_models.py            65      0   100%
 menu/tests/tests_permissions.py      266      0   100%
 menu/tests/tests_serializers.py       47      0   100%
 menu/tests/tests_utilis.py            44      0   100%
-menu/tests/tests_views.py             63      0   100%
+menu/tests/tests_views.py            196      0   100%
 menu/urls.py                           7      0   100%
 menu/utils.py                         22      0   100%
-menu/views.py                         25      5    80%
+menu/views.py                         25      1    96%
 users/__init__.py                      0      0   100%
 users/admin.py                         7      0   100%
 users/apps.py                          4      0   100%
@@ -66,9 +70,7 @@ users/migrations/0001_initial.py       8      0   100%
 users/migrations/__init__.py           0      0   100%
 users/models.py                        3      0   100%
 ------------------------------------------------------
-TOTAL                                707     10    99%
-
-
+TOTAL                                840      3    99%
 ## Licence
 ```text
 * ----------------------------------------------------------------------------

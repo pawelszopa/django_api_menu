@@ -1,8 +1,7 @@
 from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import viewsets
-
 from menu.models import Menu, Dish
 from menu.serializers import MenuSerializer, DishSerializer
 from menu.permissions import IsOwnerOrStaffOrAdmin, IsOwnerOrStaffOrAdminOrReadOnly
@@ -16,12 +15,10 @@ class DishViewSet(viewsets.ModelViewSet):
 
 class MenuViewSet(viewsets.ModelViewSet):
     serializer_class = MenuSerializer
-    queryset = Menu.objects.all().annotate(dishes_count=Count('dish')).prefetch_related('dish')
     permission_classes = [IsOwnerOrStaffOrAdminOrReadOnly]
-
-    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filter_backends = [OrderingFilter, DjangoFilterBackend, SearchFilter]
+    search_fields = ["name"]
     filterset_fields = {
-        'name': ["exact"],
         'updated_at': ["exact"],
         'created_at': ['lte', 'gte'],
     }
