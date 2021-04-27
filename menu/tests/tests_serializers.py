@@ -35,8 +35,8 @@ class MenuSerializerTests(TestCase):
         self.assertEqual(data['id'], self.menu.id)
         self.assertEqual(data['name'], self.menu.name)
         self.assertEqual(data['description'], self.menu.description)
-        self.assertEqual(data['created_at'], datetime.strftime(self.menu.created_at, "%Y-%m-%d - %H:%M:%S"))
-        self.assertEqual(data['updated_at'], datetime.strftime(self.menu.updated_at, "%Y-%m-%d - %H:%M:%S"))
+        self.assertEqual(data['created_at'], datetime.strftime(self.menu.created_at, "%Y-%m-%d"))
+        self.assertEqual(data['updated_at'], datetime.strftime(self.menu.updated_at, "%Y-%m-%d"))
         self.assertEqual(data['dish'][0]['id'], self.menu.dish.first().id)
 
 

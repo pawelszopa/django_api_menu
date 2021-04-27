@@ -15,7 +15,7 @@ class MenuListViewTests(APITestCase):
     def setUp(self) -> None:
         self.view_menu = MenuListView
         self.view = MenuListView.as_view()
-        self.url = reverse("private_menu")
+        self.url = reverse("menu:private_menu")
 
         self.user = user.objects.create_user(username='test_user', email='test@user.com', password='testpass123')
 
@@ -93,7 +93,7 @@ class MenuDetailedViewTest(APITestCase):
     def setUp(self) -> None:
         self.view_menu = MenuDetailedView
         self.view = MenuDetailedView.as_view()
-        self.url = reverse("private_menu_detail", kwargs={'pk': 1})
+        self.url = reverse("menu:private_menu_detail", kwargs={'pk': 1})
 
         self.user = user.objects.create_user(username='test_user', email='test@user.com', password='testpass123')
 
@@ -161,18 +161,18 @@ class MenuDetailedViewTest(APITestCase):
 
     def test_authorized_get_menu_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.get(reverse("private_menu_detail", kwargs={'pk': self.menu1.id}))
+        response = api_client.get(reverse("menu:private_menu_detail", kwargs={'pk': self.menu1.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], self.menu1.id)
 
     def test_authorized_post_menu_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.post(reverse("private_menu_detail", kwargs={'pk': self.menu1.id}))
+        response = api_client.post(reverse("menu:private_menu_detail", kwargs={'pk': self.menu1.id}))
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_authorized_put_menu_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.put(reverse("private_menu_detail", kwargs={'pk': self.menu1.id}), data={
+        response = api_client.put(reverse("menu:private_menu_detail", kwargs={'pk': self.menu1.id}), data={
             'name': 'Test Menu 1',
             'description': 'PUT',
         })
@@ -181,7 +181,7 @@ class MenuDetailedViewTest(APITestCase):
 
     def test_authorized_patch_menu_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.patch(reverse("private_menu_detail", kwargs={'pk': self.menu1.id}), data={
+        response = api_client.patch(reverse("menu:private_menu_detail", kwargs={'pk': self.menu1.id}), data={
             'description': 'PATCH',
         })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -189,7 +189,7 @@ class MenuDetailedViewTest(APITestCase):
 
     def test_authorized_delete_menu_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.delete(reverse("private_menu_detail", kwargs={'pk': self.menu2.id}))
+        response = api_client.delete(reverse("menu:private_menu_detail", kwargs={'pk': self.menu2.id}))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Menu.objects.filter(id=self.menu2.id))
 
@@ -198,7 +198,7 @@ class DishListViewTests(APITestCase):
     def setUp(self) -> None:
         self.view_menu = DishListView
         self.view = DishListView.as_view()
-        self.url = reverse("private_dish")
+        self.url = reverse("menu:private_dish")
 
         self.user = user.objects.create_user(username='test_user', email='test@user.com', password='testpass123')
 
@@ -282,7 +282,7 @@ class DishDetailedViewTest(APITestCase):
     def setUp(self) -> None:
         self.view_menu = DishDetailedView
         self.view = DishDetailedView.as_view()
-        self.url = reverse("private_dish_detail", kwargs={'pk': 1})
+        self.url = reverse("menu:private_dish_detail", kwargs={'pk': 1})
 
         self.user = user.objects.create_user(username='test_user', email='test@user.com', password='testpass123')
 
@@ -350,18 +350,18 @@ class DishDetailedViewTest(APITestCase):
 
     def test_authorized_get_dish_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.get(reverse("private_dish_detail", kwargs={'pk': self.dish1.id}))
+        response = api_client.get(reverse("menu:private_dish_detail", kwargs={'pk': self.dish1.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], self.dish1.id)
 
     def test_authorized_post_dish_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.post(reverse("private_dish_detail", kwargs={'pk': self.dish1.id}))
+        response = api_client.post(reverse("menu:private_dish_detail", kwargs={'pk': self.dish1.id}))
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_authorized_put_dish_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.put(reverse("private_dish_detail", kwargs={'pk': self.dish1.id}), data={
+        response = api_client.put(reverse("menu:private_dish_detail", kwargs={'pk': self.dish1.id}), data={
             'name': 'Test Meat Dish 3',
             'description': 'PUT',
             'price': '10.50',
@@ -373,7 +373,7 @@ class DishDetailedViewTest(APITestCase):
 
     def test_authorized_patch_dish_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.patch(reverse("private_dish_detail", kwargs={'pk': self.dish1.id}), data={
+        response = api_client.patch(reverse("menu:private_dish_detail", kwargs={'pk': self.dish1.id}), data={
             'description': 'PATCH',
         })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -381,6 +381,6 @@ class DishDetailedViewTest(APITestCase):
 
     def test_authorized_delete_dish_detail(self):
         api_client.login(username='test_user', password='testpass123')
-        response = api_client.delete(reverse("private_dish_detail", kwargs={'pk': self.dish2.id}))
+        response = api_client.delete(reverse("menu:private_dish_detail", kwargs={'pk': self.dish2.id}))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Dish.objects.filter(id=self.dish2.id))

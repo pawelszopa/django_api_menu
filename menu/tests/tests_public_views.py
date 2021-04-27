@@ -16,7 +16,7 @@ class PublicMenuListViewTest(APITestCase):
     def setUp(self) -> None:
         self.view_menu = PublicMenuListView
         self.view = PublicMenuListView.as_view()
-        self.url = reverse("public_menu")
+        self.url = reverse("menu:public_menu")
         self.request = factory.get(self.url)
 
     def test_url_revers(self):
@@ -117,7 +117,7 @@ class PublicMenuListViewQuerysetTest(APITestCase):
     def setUp(self) -> None:
         self.view_menu = PublicMenuListView
         self.view = PublicMenuListView.as_view()
-        self.url = reverse("public_menu")
+        self.url = reverse("menu:public_menu")
         self.request = factory.get(self.url)
 
         self.menu1 = Menu.objects.create(

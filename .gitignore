@@ -22,3 +22,4 @@ venv.bak/
 pythonenv*
 
 *photos
+.coverage

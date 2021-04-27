@@ -31,7 +31,7 @@ class DishListView(ListCreateAPIView):
 
     serializer_class = DishSerializer
     model = Dish
-    queryset = Dish.objects.all()
+    queryset = Dish.objects.all().prefetch_related('menu')
 
 
 class DishDetailedView(RetrieveUpdateDestroyAPIView):
@@ -42,7 +42,7 @@ class DishDetailedView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
-        return Dish.objects.filter(pk=pk)
+        return Dish.objects.filter(pk=pk).prefetch_related('menu')
 
 
 class PublicMenuListView(ListAPIView):
@@ -89,7 +89,7 @@ class PublicMenuListView(ListAPIView):
         if sort_dish == 'ASC':
             queryset = queryset.order_by('dish_number')
 
-        return queryset
+        return queryset.prefetch_related('dish')
 
 
 class PublicMenuView(RetrieveAPIView):

@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'drf_yasg',
+    'debug_toolbar',
 
 
     # local
@@ -61,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -164,3 +167,8 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 
 SCHEDULER_HOUR = int(os.environ.get("SCHEDULER_HOUR", 22))
 SCHEDULER_MINUTE = int(os.environ.get("SCHEDULER_MINUTE", 45))
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG
+}
