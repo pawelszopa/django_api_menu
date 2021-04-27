@@ -39,7 +39,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(pattern_name="menu:public_menu")),
+    path('', RedirectView.as_view(pattern_name="menu:cards-list")),
     path('api/v1/', include('menu.urls'), name='menu'),
     path('accounts/', include('dj_rest_auth.urls')),
     path('accounts/registration/', include('dj_rest_auth.registration.urls')),

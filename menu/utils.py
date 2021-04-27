@@ -18,8 +18,6 @@ def send_email(receiver, title, message):
     )
     if mail != 1:
         logging.error(f"Could not send email {receiver}")
-    else:
-        logging.error(f"Successfully send email to {receiver}")
 
 
 def send_update_email():

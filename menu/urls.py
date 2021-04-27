@@ -1,14 +1,11 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
+
 from menu import views
 
 app_name = 'menu'
 
-urlpatterns = [
-    path('private/menu/', views.MenuListView.as_view(), name='private_menu'),
-    path('private/menu/<int:pk>', views.MenuDetailedView.as_view(), name='private_menu_detail'),
-    path('private/dish/', views.DishListView.as_view(), name='private_dish'),
-    path('private/dish/<int:pk>', views.DishDetailedView.as_view(), name='private_dish_detail'),
-    path('public/menu/', views.PublicMenuListView.as_view(), name='public_menu'),
-    path('public/menu/<int:pk>', views.PublicMenuView.as_view(), name='public_menu_detail'),
+router = DefaultRouter()
+router.register(r"dishes", views.DishViewSet, basename="dishes")
+router.register(r"cards", views.MenuViewSet, basename="cards")
 
-]
+urlpatterns = router.urls
