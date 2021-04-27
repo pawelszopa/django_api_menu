@@ -15,16 +15,18 @@ You have to have installed docker and docker-compose on your computer.
 
 ### Endpoints:
 Views depending on permissions
-Public:
-1. `v1/menus`  GET - allows to get list of menus
-2. `v1/dishes` GET - allows to get list of dishes
-3. `v1/menus/{id}` GET - allows to get information about a menu by id
-4. `v1/dishes/{id}` GET  - allows to get information about a dish by id
+`/admin` - CMS admin
+`/accounts/login/` - DRF rest Login
+`/accounts/registration/` -  DRF  registration
+`/accounts/logout/` -  DRF  logout
+`api-auth/` - login form redirect from browsable API
+`api/v1/cards` allows to get list of menus
+`api/v1/dishes`  allows to get list of dishes
+`api/v1/cards/{id}` allows to get information about a menu by id
+`api/v1/dishes/{id}` allows to get information about a dish by id
 
 ### To use  predefined data:
 `docker-compose exec web python manage.py loaddata menu`
-### Admin User:
-`/admin` - username `admin` password `adminpass123`
 
 ### Tests
 1.API tests - type command `docker-compose exec web python manage.py test menu/tests` in terminal in project root directory.
@@ -32,40 +34,41 @@ Public:
 ### Coverage
 Check coverage:
 1. `docker-compose exec web coverage run manage.py test menu/tests`
-2. `docker-compose exec coverage report`
+2. `docker-compose exec web coverage report`
 
-```text
-Name                                         Stmts   Miss  Cover
-----------------------------------------------------------------
-config/__init__.py                               0      0   100%
-config/settings.py                              32      0   100%
-config/urls.py                                  13      0   100%
-manage.py                                       12      2    83%
-menu/__init__.py                                 0      0   100%
-menu/admin.py                                    4      0   100%
-menu/apps.py                                     8      0   100%
-menu/jobs.py                                     7      0   100%
-menu/migrations/0001_initial.py                  5      0   100%
-menu/migrations/0002_auto_20210419_1554.py       5      0   100%
-menu/migrations/0003_alter_menu_dish.py          5      0   100%
-menu/migrations/0004_alter_dish_price.py         6      0   100%
-menu/migrations/0005_dish_image.py               4      0   100%
-menu/migrations/0006_alter_menu_dish.py          4      0   100%
-menu/migrations/0007_alter_menu_dish.py          4      0   100%
-menu/migrations/__init__.py                      0      0   100%
-menu/models.py                                  22      0   100%
-menu/serializers.py                             12      0   100%
-menu/tests/tests_models.py                      52      0   100%
-menu/tests/tests_privite_views.py              197      0   100%
-menu/tests/tests_public_views.py               112      0   100%
-menu/tests/tests_serializers.py                 44      0   100%
-menu/urls.py                                     4      0   100%
-menu/utils.py                                   23     15    35%
-menu/views.py                                   68      2    97%
-----------------------------------------------------------------
-TOTAL                                          643     19    97%
+Name                               Stmts   Miss  Cover
+------------------------------------------------------
+config/__init__.py                     0      0   100%
+config/settings.py                    34      0   100%
+config/urls.py                        14      0   100%
+manage.py                             12      2    83%
+menu/__init__.py                       0      0   100%
+menu/admin.py                          4      0   100%
+menu/apps.py                           9      0   100%
+menu/jobs.py                           7      0   100%
+menu/migrations/0001_initial.py        9      0   100%
+menu/migrations/__init__.py            0      0   100%
+menu/models.py                        25      0   100%
+menu/permissions.py                    9      0   100%
+menu/serializers.py                   23      3    87%
+menu/tests/tests_models.py            65      0   100%
+menu/tests/tests_permissions.py      266      0   100%
+menu/tests/tests_serializers.py       47      0   100%
+menu/tests/tests_utilis.py            44      0   100%
+menu/tests/tests_views.py             63      0   100%
+menu/urls.py                           7      0   100%
+menu/utils.py                         22      0   100%
+menu/views.py                         25      5    80%
+users/__init__.py                      0      0   100%
+users/admin.py                         7      0   100%
+users/apps.py                          4      0   100%
+users/migrations/0001_initial.py       8      0   100%
+users/migrations/__init__.py           0      0   100%
+users/models.py                        3      0   100%
+------------------------------------------------------
+TOTAL                                707     10    99%
 
-```
+
 ## Licence
 ```text
 * ----------------------------------------------------------------------------

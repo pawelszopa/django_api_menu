@@ -4,14 +4,19 @@ from django.test import TestCase
 
 from menu.models import Menu, Dish
 from menu.serializers import MenuSerializer, DishSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class MenuSerializerTests(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create_user(username='Test User', email='test@user.com', password='testpass123')
         self.menu = Menu.objects.create(
             name='Test Menu 1',
             description='Test menu description 1',
+            author=self.user
         )
         self.dish_meat = Dish.objects.create(
             name='Test Meat Dish 1',
@@ -19,6 +24,7 @@ class MenuSerializerTests(TestCase):
             price='10.50',
             prep_time=60,
             is_vegetarian=False,
+            author=self.user
         )
         self.menu.dish.add(self.dish_meat)
 
@@ -37,15 +43,17 @@ class MenuSerializerTests(TestCase):
         self.assertEqual(data['description'], self.menu.description)
         self.assertEqual(data['created_at'], datetime.strftime(self.menu.created_at, "%Y-%m-%d"))
         self.assertEqual(data['updated_at'], datetime.strftime(self.menu.updated_at, "%Y-%m-%d"))
-        self.assertEqual(data['dish'][0]['id'], self.menu.dish.first().id)
+        self.assertTrue(self.menu.dish.first().id in data['dish'])
 
 
 class DishSerializerTests(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create_user(username='Test User', email='test@user.com', password='testpass123')
         self.menu = Menu.objects.create(
             name='Test Menu 1',
             description='Test menu description 1',
+            author=self.user
         )
         self.dish_meat = Dish.objects.create(
             name='Test Meat Dish 1',
@@ -53,6 +61,7 @@ class DishSerializerTests(TestCase):
             price='10.50',
             prep_time=60,
             is_vegetarian=False,
+            author=self.user
         )
         self.menu.dish.add(self.dish_meat)
 
@@ -63,7 +72,7 @@ class DishSerializerTests(TestCase):
     def test_contain_expected_fields(self):
         data = self.serializer.data[0]
         self.assertCountEqual(data.keys(),
-                              ['id', 'name', 'description', 'price', 'prep_time', 'is_vegetarian', 'image', 'menu'])
+                              ['id', 'name', 'description', 'price', 'prep_time', 'is_vegetarian', 'image'])
 
     def test_contain_expected_values(self):
         data = self.serializer.data[0]
@@ -74,4 +83,3 @@ class DishSerializerTests(TestCase):
         self.assertEqual(data['prep_time'], self.dish_meat.prep_time)
         self.assertEqual(data['is_vegetarian'], self.dish_meat.is_vegetarian)
         self.assertEqual(bool(data['image']), bool(self.dish_meat.image))
-        self.assertEqual(data['menu'][0], self.dish_meat.menu.first().id)

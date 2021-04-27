@@ -1,4 +1,4 @@
-from django.core.exceptions import ValidationError
+from django.db import DataError, IntegrityError
 from django.test import TestCase
 
 from menu.models import *
@@ -55,24 +55,8 @@ class MenuTests(TestCase):
 
     def test_author_required(self):
         menu = Menu()
-        with self.assertRaises(ValidationError) as exc:
-            menu.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(exceptions["author"], ["This field cannot be null."])
-
-    def test_name_required(self):
-        menu = Menu(author=self.user)
-        with self.assertRaises(ValidationError) as exc:
-            menu.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(exceptions["name"], ["This field cannot be blank."])
-
-    def test_description_required(self):
-        menu = Menu(author=self.user, name="test")
-        with self.assertRaises(ValidationError) as exc:
-            menu.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(exceptions["description"], ["This field cannot be blank."])
+        with self.assertRaises(IntegrityError):
+            menu.save()
 
     def test_create_menu_with_too_long_name(self):
         menu = Menu(
@@ -80,13 +64,8 @@ class MenuTests(TestCase):
             name="x" * 257,
             description="Test menu description 1",
         )
-        with self.assertRaises(ValidationError) as exc:
-            menu.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(
-            exceptions["name"],
-            ["Ensure this value has at most 255 characters (it has 257)."],
-        )
+        with self.assertRaises(DataError):
+            menu.save()
 
     def test_create_menu_with_already_existing_name(self):
         menu = Menu(
@@ -94,10 +73,8 @@ class MenuTests(TestCase):
             name="Test Menu 1",
             description="Test menu description 1",
         )
-        with self.assertRaises(ValidationError) as exc:
-            menu.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(exceptions["name"], ["Menu with this Name already exists."])
+        with self.assertRaises(IntegrityError):
+            menu.save()
 
 
 class DishTests(TestCase):
@@ -148,21 +125,6 @@ class DishTests(TestCase):
     def test_dish_str(self):
         self.assertEqual(str(self.dish_meat), "Test Meat Dish 1")
 
-    def test_required_fields(self):
-        dish = Dish()
-        with self.assertRaises(ValidationError) as exc:
-            dish.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(len(exceptions.keys()), 6)
-        self.assertEqual(exceptions["author"], ["This field cannot be null."])
-        self.assertEqual(exceptions["name"], ["This field cannot be blank."])
-        self.assertEqual(exceptions["description"], ["This field cannot be blank."])
-        self.assertEqual(exceptions["price"], ["This field cannot be null."])
-        self.assertEqual(exceptions["prep_time"], ["This field cannot be null."])
-        self.assertEqual(
-            exceptions["is_vegetarian"], ["“None” value must be either True or False."]
-        )
-
     def test_create_dish_with_too_long_name(self):
         dish = Dish(
             author=self.user,
@@ -172,46 +134,8 @@ class DishTests(TestCase):
             prep_time=60,
             is_vegetarian=False,
         )
-        with self.assertRaises(ValidationError) as exc:
-            dish.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(
-            exceptions["name"],
-            ["Ensure this value has at most 255 characters (it has 257)."],
-        )
-
-    def test_price_2_decimal_places(self):
-        dish = Dish(
-            author=self.user,
-            name="x" * 256,
-            description="Test meat description 1",
-            price="10.5050",
-            prep_time=60,
-            is_vegetarian=False,
-        )
-        with self.assertRaises(ValidationError) as exc:
-            dish.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(
-            exceptions["price"],
-            ["Ensure that there are no more than 2 decimal places."],
-        )
-
-    def test_negative_price(self):
-        dish = Dish(
-            author=self.user,
-            name="x" * 256,
-            description="Test meat description 1",
-            price="-10.50",
-            prep_time=60,
-            is_vegetarian=False,
-        )
-        with self.assertRaises(ValidationError) as exc:
-            dish.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(
-            exceptions["price"], ["Ensure this value is greater than or equal to 0.01."]
-        )
+        with self.assertRaises(DataError):
+            dish.save()
 
     def test_create_dish_with_to_big_price(self):
         dish = Dish(
@@ -221,10 +145,5 @@ class DishTests(TestCase):
             prep_time=60,
             is_vegetarian=False,
         )
-        with self.assertRaises(ValidationError) as exc:
-            dish.full_clean()
-        exceptions = dict(exc.exception)
-        self.assertEqual(
-            exceptions["price"],
-            ["Ensure that there are no more than 6 digits in total."],
-        )
+        with self.assertRaises(DataError):
+            dish.save()

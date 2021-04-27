@@ -10,13 +10,13 @@ from menu.permissions import IsOwnerOrStaffOrAdmin, IsOwnerOrStaffOrAdminOrReadO
 
 class DishViewSet(viewsets.ModelViewSet):
     serializer_class = DishSerializer
-    queryset = Dish.objects.all()
+    queryset = Dish.objects.all().prefetch_related('author')
     permission_classes = [IsOwnerOrStaffOrAdmin]
 
 
 class MenuViewSet(viewsets.ModelViewSet):
     serializer_class = MenuSerializer
-    queryset = Menu.objects.all().annotate(dishes_count=Count('dish'))
+    queryset = Menu.objects.all().annotate(dishes_count=Count('dish')).prefetch_related('dish')
     permission_classes = [IsOwnerOrStaffOrAdminOrReadOnly]
 
     filter_backends = [OrderingFilter, DjangoFilterBackend]
@@ -27,3 +27,12 @@ class MenuViewSet(viewsets.ModelViewSet):
     }
     ordering_fields = ['name', 'dishes_count']
     ordering = ['pk']
+
+    def get_queryset(self):
+        print(self.request.user.get_user_permissions())
+        if self.request.user.get_user_permissions():
+            queryset = Menu.objects.all().annotate(dishes_count=Count('dish')).prefetch_related('dish')
+        else:
+            queryset = Menu.objects.all().annotate(dishes_count=Count('dish')).filter(
+                dishes_count__gt=0).prefetch_related('dish')
+        return queryset
