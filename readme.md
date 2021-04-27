@@ -15,7 +15,7 @@ You have to have installed docker and docker-compose on your computer.
 
 ### Endpoints:
 
-Public API - prevent from seeing empty menus (cards). Empty menu is menu without any dish
+Public API - prevent from seeing empty menus (cards). Empty menu is menu without any dish.
 
 Views are permission dependant overview below (for more API urls check `swagger`)
 
