@@ -10,6 +10,19 @@ You have to have installed docker and docker-compose on your computer.
 3. Open browser with url `http://0.0.0.0:8000` or `http://127.0.0.1:8000` on Windows.
 4. Enjoy!
 
+## Send email mechanism:
+Inside app there is send email notification each day at 10.00
+- to change time modify  .env
+SCHEDULER_MINUTE=00
+SCHEDULER_HOUR=10
+  
+- configuration for email:
+
+EMAIL_HOST_USER=migonik792@iludir.com
+SENDGRID_API_KEY='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'
+  
+will be disabled after `4th of May`
+
 ### Swagger:
 `http://localhost:8000/swagger/`
 
@@ -47,6 +60,8 @@ Check coverage:
 1. `docker-compose exec web coverage run manage.py test menu/tests`
 2. `docker-compose exec web coverage report`
 
+```text
+
 Name                               Stmts   Miss  Cover
 ------------------------------------------------------
 config/__init__.py                     0      0   100%
@@ -78,6 +93,9 @@ users/migrations/__init__.py           0      0   100%
 users/models.py                        3      0   100%
 ------------------------------------------------------
 TOTAL                                840      3    99%
+
+```
+
 ## Licence
 ```text
 * ----------------------------------------------------------------------------
