@@ -16,12 +16,7 @@ Inside app there is send email notification each day at 10.00
 SCHEDULER_MINUTE=00
 SCHEDULER_HOUR=10
   
-- configuration for email:
 
-EMAIL_HOST_USER=migonik792@iludir.com
-SENDGRID_API_KEY='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'
-  
-will be disabled after `4th of May`
 
 ### Swagger:
 `http://localhost:8000/swagger/`
